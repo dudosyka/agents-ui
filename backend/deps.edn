@@ -44,7 +44,8 @@
                      :replace-paths []
                      :main-opts ["-m" "uberdeps.uberjar"]}
            :repl {:extra-paths ["dev"]
-                  :main-opts ["-e" "(require 'dev)" "-r"]}}
-
+                  :main-opts ["-e" "(require 'dev)" "-r"]}
+           :build {:deps {io.github.clojure/tools.build {:git/tag "v0.10.14" :git/sha "1176afd"}}
+                   :ns-default build}}
 
  :paths ["src" "resources"]}
