@@ -5,6 +5,7 @@
             [iapetos.collector.ring :as prometheus-ring]
             [iapetos.core :as prometheus]
             [modules.project.controller :as project]
+            [modules.task.controller :as task]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.json :refer [wrap-json-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
@@ -22,6 +23,7 @@
 (defn app-routes [component]
   (-> routes
       (apply (concat '()
+                     (task/routes)
                      (project/routes)
                      [(ws/create-ws-endpoint "/ws" ;Endpoint
                                              {} ;Router
