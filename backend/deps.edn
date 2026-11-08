@@ -30,7 +30,9 @@
 
         me.raynes/fs {:mvn/version "1.4.6"}
 
-        iapetos/iapetos {:mvn/version "0.1.6"}}
+        iapetos/iapetos {:mvn/version "0.1.6"}
+
+        http.async.client/http.async.client {:mvn/version "1.4.0"}}
 
  :aliases {:test {:extra-paths ["test"]
                   :extra-deps {io.github.cognitect-labs/test-runner
