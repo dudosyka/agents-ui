@@ -4,6 +4,7 @@
             [components.ring-server.middleware :as middlewares]
             [iapetos.collector.ring :as prometheus-ring]
             [iapetos.core :as prometheus]
+            [modules.project.controller :as project]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.json :refer [wrap-json-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
@@ -21,6 +22,7 @@
 (defn app-routes [component]
   (-> routes
       (apply (concat '()
+                     (project/routes)
                      [(ws/create-ws-endpoint "/ws" ;Endpoint
                                              {} ;Router
                                              [(ws/wrap-exception-handling)
