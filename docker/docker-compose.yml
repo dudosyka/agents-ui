@@ -1,15 +1,43 @@
+secrets:
+  pgadmin_pwd:
+    file: ./pgadmin.pwd
+  pg_pwd:
+    file: ./pg.pwd
 services:
   postgres:
     image: postgres:16
     restart: always
     environment:
-      POSTGRES_PASSWORD: my-secret-pw
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_pwd
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
+      - ./postgres/data:/var/lib/postgresql/data
       - ./postgres/init.d:/docker-entrypoint-initdb.d:ro
+    secrets:
+      - pg_pwd
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin
+      - PGADMIN_DEFAULT_PASSWORD_FILE=/run/secrets/pgadmin_pwd
+    volumes:
+      - ./postgres/pgadmin:/var/lib/pgadmin
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:8082:80"
+    secrets:
+      - pgadmin_pwd
+    depends_on:
+      - postgres
   redis:
     image: redis:alpine
     restart: always
+  app:
+    image: agents-ui-backend:latest
+    restart: always
     ports:
-      - "127.0.0.1:6379:6379"
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      - postgres
+      - redis
+    entrypoint: /app/startup.sh

@@ -5,7 +5,7 @@
  :jwt-secret #include "jwt.edn"
  :jwt-secret-editor #include "jws.edn"
  :collaboration-token-expiring-time 172800000 ; about 2 days
- :database {:jdbcUrl #or [#env DATABASE_URL "jdbc:postgresql://localhost:5432/postgres"]
+ :database {:jdbcUrl #or [#env DATABASE_URL "jdbc:postgresql://postgres:5432/postgres"]
             :username "postgres"
             :password #include "secrets.edn"}
- :redis {:url #or [#env REDIS_URL "redis://localhost:6379"]}}
+ :redis {:url #or [#env REDIS_URL "redis:redis:6379"]}}
