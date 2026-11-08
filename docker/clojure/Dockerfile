@@ -1,0 +1,33 @@
+FROM clojure:tools-deps as build
+
+COPY backend /app
+
+WORKDIR /app
+
+RUN ["clj", "-T:build", "uber"]
+
+FROM eclipse-temurin:25-jdk-alpine as jre-build
+
+RUN ["mkdir", "/app"]
+
+WORKDIR /app
+
+RUN $JAVA_HOME/bin/jlink \
+    --add-modules java.base,java.sql,java.desktop,java.xml,java.naming,java.management,jdk.unsupported \
+    --strip-debug \
+    --no-man-pages \
+    --no-header-files \
+    --compress=2 \
+    --output ./runtime
+
+FROM alpine:latest
+
+RUN ["mkdir", "/app"]
+
+WORKDIR /app
+
+COPY --from=build /app/target/backend-0.1.0-uber.jar .
+
+COPY --from=jre-build /app/runtime /javaruntime
+
+ENTRYPOINT [ "/bin/sh" ]
