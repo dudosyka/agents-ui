@@ -26,8 +26,14 @@ RUN ["mkdir", "/app"]
 
 WORKDIR /app
 
-COPY --from=build /app/target/backend-0.1.0-uber.jar .
+COPY --from=build /app/target/backend.jar .
 
 COPY --from=jre-build /app/runtime /javaruntime
+
+COPY --from=build /app/startup.sh .
+
+COPY docker/wait-for-it.sh .
+
+RUN ["chmod", "+x", "/app/startup.sh", "/app/wait-for-it.sh"]
 
 ENTRYPOINT [ "/bin/sh" ]
